@@ -65,6 +65,7 @@ wait_for_pods istio-system
 
 log "Installing Flask-app ArgoCD Application..."
 install_manifest "https://raw.githubusercontent.com/AlexeyPetroff/argocd-gitops/main/argocd-apps/flask-app.yaml"
-wait_for_pods flask-app
+sleep 30
+wait_for_pods "flask-app"
 
 log "All components installed successfully!"

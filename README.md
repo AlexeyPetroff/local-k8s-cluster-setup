@@ -57,7 +57,7 @@ This repository contains scripts and manifests to quickly spin up a local [k3d](
 
 3. **Install ArgoCD and deploy applications:**
     ```
-    ./install_argocd.sh
+    ./scripts/install_argocd.sh
     ```
     This script installs ArgoCD, waits for it to be ready, then applies ArgoCD Applications for Istio and the Flask app.
 
@@ -68,7 +68,8 @@ This repository contains scripts and manifests to quickly spin up a local [k3d](
     Visit [https://localhost:9090](https://localhost:9090)  
     Get the admin password:
     ```
-    kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d
+    PASSWORD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d)
+    echo "$PASSWORD"
     ```
 
 ---
