@@ -1,0 +1,51 @@
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: "local-istio-cluster"
+
+servers: 1
+agents: 2
+
+kubeAPI:
+  host: "k3d.local.gd"
+  hostIP: "127.0.0.1"
+  hostPort: "6443"
+image: rancher/k3s:latest
+
+ports:
+  - port: 80:80
+    nodeFilters:
+      - loadbalancer
+
+  - port: 443:443
+    nodeFilters:
+      - loadbalancer
+
+registries:
+  create:
+    name: registry.k3d.local
+    host: "0.0.0.0"
+    hostPort: "5001"
+
+options:
+  k3d:
+    wait: true
+    timeout: "60s"
+    disableLoadbalancer: false
+    disableImageVolume: false
+    disableRollback: false
+    loadbalancer:
+      configOverrides:
+        - settings.workerConnections=2048
+  k3s:
+    extraArgs:
+      - arg: --disable=traefik
+        nodeFilters:
+          - server:*
+  kubeconfig:
+    updateDefaultKubeconfig: true
+    switchCurrentContext: true
+
+
+
+
