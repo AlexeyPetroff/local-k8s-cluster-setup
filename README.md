@@ -55,7 +55,7 @@ This repository contains scripts and manifests to quickly spin up a local [k3d](
     ```
     This script will create a k3d cluster with ports mapped for Istio ingress.
 
-3. **Install ArgoCD and deploy applications:**
+3. **Install ArgoCD and deploy Apps of apps:**
     ```
     ./scripts/install_argocd.sh
     ```

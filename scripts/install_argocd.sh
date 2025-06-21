@@ -48,24 +48,11 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 wait_for_pods argocd
 
 
-log "Installing Istio ArgoCD Applications..."
-ISTIO_APPS=(
-  "https://raw.githubusercontent.com/AlexeyPetroff/argocd-gitops/main/argocd-apps/istio/istio-crd.yaml"
-  "https://raw.githubusercontent.com/AlexeyPetroff/argocd-gitops/main/argocd-apps/istio/istiod.yaml"
-  "https://raw.githubusercontent.com/AlexeyPetroff/argocd-gitops/refs/heads/main/argocd-apps/istio/istio-gateway.yaml"
-)
+log "Install Argo app-of-apps"
 
-for url in "${ISTIO_APPS[@]}"; do
-  install_manifest "$url"
-  sleep 20
-done
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$SCRIPT_DIR/.."
+install_manifest "$REPO_ROOT/config/argo-sync-app.yaml"
 
-wait_for_pods istio-system
-
-
-log "Installing Flask-app ArgoCD Application..."
-install_manifest "https://raw.githubusercontent.com/AlexeyPetroff/argocd-gitops/main/argocd-apps/flask-app.yaml"
-sleep 30
-wait_for_pods "flask-app"
 
 log "All components installed successfully!"
