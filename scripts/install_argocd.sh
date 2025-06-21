@@ -48,6 +48,19 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 wait_for_pods argocd
 
 
+log "Generate self-signed certs for ingress"
+openssl req -x509 -sha256 -nodes -days 365 \
+  -newkey rsa:2048 \
+  -subj "/CN=flask-app.local/O=LocalDev" \
+  -keyout flask-app.local.key \
+  -out flask-app.local.crt
+
+kubectl create ns istio-system
+kubectl create secret tls flask-app-tls \
+  --cert=flask-app.local.crt \
+  --key=flask-app.local.key \
+  -n istio-system
+
 log "Install Argo app-of-apps"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

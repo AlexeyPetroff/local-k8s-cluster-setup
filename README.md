@@ -89,15 +89,22 @@ Any change to the `argocd-gitops` repo is automatically picked up by ArgoCD and 
 ## Accessing the Apps
 
 - **Flask app:**  
-  By default, exposed via Istio ingress at `http://flask-app.local:8080/`
-  - Port forward istio ingress:
+  By default, exposed via Istio ingress at `http://flask-app.local:80` and `https://flask-app.local`
+
+  - Access the app via HTTP:
     ```
-    kubectl port-forward -n istio-system svc/istio-ingressgateway 8080:80
+    curl -H "Host: flask-app.local" http://127.0.01:80/
     ```
-  - Then access the app:
+  - Or via HTTPS:
     ```
-    curl -H "Host: flask-app.local" http://localhost:8080/
+    curl -k --resolve flask-app.local:443:127.0.0.1 https://flask-app.local
     ```
+- Or create an entry in /etc/hosts to resole flask-app.local to 127.0.0.1
+    ```
+    echo "127.0.0.1 flask-app.local" | sudo tee -a /etc/hosts
+    ```
+    Then access `http://flask-app.local` or `https://flask-app.local`
+  
 
 ---
 
@@ -106,4 +113,5 @@ Any change to the `argocd-gitops` repo is automatically picked up by ArgoCD and 
 To delete your k3d cluster and all resources:
 ```
 k3d cluster delete local-istio-cluster
+sudo sed -i '' '/flask-app.local/d' /etc/hosts
 ```
