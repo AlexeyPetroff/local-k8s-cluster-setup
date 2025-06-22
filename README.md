@@ -1,6 +1,6 @@
 # Local GitOps Environment: k3d + ArgoCD + Istio + Flask App
 
-This repository contains scripts and manifests to quickly spin up a local [k3d](https://k3d.io/) Kubernetes cluster, install [Argo CD](https://argo-cd.readthedocs.io/), and deploy a sample Flask application and Istio resources using GitOps principles.
+This repository contains scripts and manifests to quickly spin up a local [k3d](https://k3d.io/) Kubernetes cluster, install [Argo CD](https://argo-cd.readthedocs.io/), and deploy an App of apps.
 
 - **ArgoCD GitOps repo:** [AlexeyPetroff/argocd-gitops](https://github.com/AlexeyPetroff/argocd-gitops)
 - **Flask app source:** [AlexeyPetroff/flask-app](https://github.com/AlexeyPetroff/flask-app) The image is built and pushed to GitHub Container Registry (ghcr) via GitHub Actions
@@ -25,8 +25,7 @@ This repository contains scripts and manifests to quickly spin up a local [k3d](
 **What’s automated:**
 
 - Local Kubernetes cluster creation (k3d)
-- Installation of ArgoCD and Istio via scripts
-- Declarative deployment of a Flask app and Istio resources using ArgoCD Applications from a Git repo
+- Installation of ArgoCD and app of apps
 
 ---
 
@@ -78,8 +77,8 @@ This repository contains scripts and manifests to quickly spin up a local [k3d](
 
 - **k3d** spins up a multi-node local Kubernetes cluster inside Docker, with ports mapped for ingress.
 - **ArgoCD** is installed and configured to watch the [argocd-gitops](https://github.com/AlexeyPetroff/argocd-gitops) repository.
-- **Istio** is deployed as an ArgoCD Application, providing service mesh and ingress.
-- **Flask app** is deployed as an ArgoCD Application, using a container image built and pushed via GitHub Actions.
+- **Istio** is deployed using argocd Apps of apps, providing service mesh and ingress.
+- **Flask app** is deployed using argocd Apps of apps, using a container image built and pushed via GitHub Actions.
 
 All cluster state is managed declaratively via GitOps.  
 Any change to the `argocd-gitops` repo is automatically picked up by ArgoCD and applied to the cluster.
@@ -89,7 +88,8 @@ Any change to the `argocd-gitops` repo is automatically picked up by ArgoCD and 
 ## Accessing the Apps
 
 - **Flask app:**  
-  By default, exposed via Istio ingress at `http://flask-app.local:80` and `https://flask-app.local`
+  By default, exposed via Istio ingress at `http://flask-app.local:80` and `https://flask-app.local`.
+  Ports are already mapped from the local k3d cluster to local machine.
 
   - Access the app via HTTP:
     ```
